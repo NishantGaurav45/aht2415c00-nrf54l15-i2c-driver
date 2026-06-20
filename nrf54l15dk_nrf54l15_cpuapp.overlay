@@ -1,0 +1,45 @@
+/*
+ * Devicetree overlay for nrf54l15dk/nrf54l15/cpuapp
+ *
+ * Wires the AHT2415C00 (AHT20-family) temperature/humidity probe to the
+ * I2C21 peripheral on the nRF54L15 DK.
+ *
+ * Wiring used by this overlay:
+ *   AHT2415C00 VDD -> DK 3V3
+ *   AHT2415C00 GND -> DK GND
+ *   AHT2415C00 SCL -> DK P1.11
+ *   AHT2415C00 SDA -> DK P1.12
+ *
+ * If you wired the probe to different pins, only the two NRF_PSEL() lines
+ * in the pinctrl block below need to change - nothing else.
+ */
+
+&pinctrl {
+	/omit-if-no-ref/ i2c21_default: i2c21_default {
+		group1 {
+			psels = <NRF_PSEL(TWIM_SCL, 1, 11)>,
+				 <NRF_PSEL(TWIM_SDA, 1, 12)>;
+		};
+	};
+
+	/omit-if-no-ref/ i2c21_sleep: i2c21_sleep {
+		group1 {
+			psels = <NRF_PSEL(TWIM_SCL, 1, 11)>,
+				 <NRF_PSEL(TWIM_SDA, 1, 12)>;
+			low-power-enable;
+		};
+	};
+};
+
+&i2c21 {
+	status = "okay";
+	pinctrl-0 = <&i2c21_default>;
+	pinctrl-1 = <&i2c21_sleep>;
+	pinctrl-names = "default", "sleep";
+
+	aht20: aht20@38 {
+		compatible = "i2c-device";
+		reg = <0x38>;
+		status = "okay";
+	};
+};
