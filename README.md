@@ -25,8 +25,7 @@ I2C address used: `0x38` (default/fixed for this sensor family).
 aht2415c_nrf54l15/
 ├── CMakeLists.txt
 ├── prj.conf
-├── boards/
-│   └── nrf54l15dk_nrf54l15_cpuapp.overlay
+├── nrf54l15dk_nrf54l15_cpuapp.overlay
 └── src/
     └── main.c
 ```
